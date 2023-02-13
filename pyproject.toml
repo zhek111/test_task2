@@ -1,0 +1,23 @@
+[tool.poetry]
+name = "test-task1"
+version = "0.1.0"
+description = ""
+authors = ["evgeny <zhek12322@gmail.com>"]
+readme = "README.md"
+packages = [{ include = "test_task1" }]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+aiohttp = "^3.8.4"
+
+
+
+[tool.poetry.group.dev.dependencies]
+flake8 = "^6.0.0"
+pytest = "^7.2.1"
+requests-mock = "^1.10.0"
+pytest-asyncio = "^0.20.3"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
