@@ -1,7 +1,4 @@
-import aiohttp
 import pytest
-import requests
-from aiohttp import ClientError
 from aioresponses import aioresponses
 from test_task1.matrix_loader import load_matrix
 
@@ -17,10 +14,22 @@ async def test_load_matrix(matrix_fixtures):
         result = await load_matrix(url)
         assert result == expected_output
 
-@pytest.mark.asyncio
-async def test_non_existent_site(requests_mock):
-    with pytest.raises(expected_exception=Exception):
-        requests_mock.get(
-            'https://ru.hexlettt.io/courses')
-        await load_matrix('https://ru.hexlettt.io/courses')
 
+@pytest.mark.asyncio
+async def test_load_matrix_404(matrix_fixtures):
+    url = "https://raw.githubusercontent.com/avito-tech/python-trainee" \
+          "-assignment/main/matrix.txt"
+    with aioresponses() as m:
+        m.get(url, status=404)
+        with pytest.raises(Exception, match='Client error'):
+            await load_matrix(url)
+
+
+@pytest.mark.asyncio
+async def test_load_matrix_500(matrix_fixtures):
+    url = "https://raw.githubusercontent.com/avito-tech/python-trainee" \
+          "-assignment/main/matrix.txt"
+    with aioresponses() as m:
+        m.get(url, status=500)
+        with pytest.raises(Exception, match='Server error'):
+            await load_matrix(url)
